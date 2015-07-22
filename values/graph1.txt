@@ -1,0 +1,16 @@
+c pierwszy znak w linijce oznacza, co zawiera dana linijka
+c n - wspolrzedne wezla, EOF - koniec pliku
+c format wspolrzednych wezla: n <wsp.x> <wsp.y>
+
+n 1 1
+n 100 100
+n 15 48
+n 60 15
+n 70 1
+n 5 7
+n 4 8
+n 9 2
+n 80 76
+n 15 14
+
+EOF
