@@ -1,5 +1,7 @@
 package app_logic;
 
+import utils.Consts;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -7,22 +9,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 
-/**
- * Created by Piotr on 2015-03-17.
- */
 public class LogicRandomSelection
 {
-    private ArrayList<Node> alist_graph = new ArrayList<Node>();    //graf, na ktorym dzialamy
+    private ArrayList<Node> alist_graph = new ArrayList<Node>();              //graf, na ktorym dzialamy
     private ArrayList<SingleEntity> alist_population = new ArrayList<SingleEntity>(); //nasza populacja
-    private ArrayList<String> alist_report = new ArrayList<String>(); //tablica stringów
+    private ArrayList<String> alist_report = new ArrayList<String>();           //tablica stringów
 
-    private String s_graph_filepath = "values\\graf.txt";
-    private String s_reports_filepath = "values\\reports\\reportRandom";
     private int _i_report_counter = 0;
 
     public LogicRandomSelection()
     {
-        alist_graph = LogicShared.load_graph(s_graph_filepath);
+        alist_graph = LogicShared.load_graph(Consts.GRAPH_FILE_LOCATION);
     }
 
     public void run(int i_population_size)
@@ -33,12 +30,14 @@ public class LogicRandomSelection
             alist_population.add(new SingleEntity(alist_graph, true));
         }
         evaluate(alist_population);
-        printReportToConsole();
+
+        if(Consts.PRINT_TO_CONSOLE)
+            printReportToConsole();
     }
 
-    public void printToFile()
+    public void printToFile(long execution_time)
     {
-        LogicShared.printReportToFile(alist_report, s_reports_filepath, ++_i_report_counter);
+        LogicShared.printReportToFile(alist_report, Consts.REPORT_RANDOM_PATH, ++_i_report_counter, execution_time);
     }
 
     private void evaluate(ArrayList<SingleEntity> population)

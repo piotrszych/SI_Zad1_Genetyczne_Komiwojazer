@@ -1,13 +1,8 @@
 package app_logic;
 
-import com.sun.org.apache.xml.internal.serializer.utils.SystemIDResolver;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- * Created by Piotr on 2015-03-15.
- */
 public class SingleEntity
 {
     private ArrayList<Node> alist_internal_nodes = new ArrayList<Node>();

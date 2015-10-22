@@ -1,13 +1,11 @@
 package app_logic;
 
-import java.io.*;
+import utils.Consts;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
 
-/**
- * Created by Piotr on 2015-03-14.
- */
 
 /**
  * begin
@@ -33,9 +31,7 @@ public class LogicMain
     private double i_mutation_probability = 0.05;
     private int _i_parentIndexHolder;
     private int _i_report_counter = 0;
-
-    private String s_graph_filepath = "values\\graf.txt";
-    private String s_reports_filepath = "values\\reports\\report";
+    private long _execution_time = 0;
 
     LogicRandomSelection logicRandom = new LogicRandomSelection();
 
@@ -44,24 +40,45 @@ public class LogicMain
 
     public void run(int t_populationSize, double t_crossoverProbability, double t_mutatuionProbability, int t_howManyTimes, int i_elites, boolean printToFile)
     {
+        long time_start;
+        long time_end;
+
         i_crossover_probability = t_crossoverProbability;
         i_mutation_probability = t_mutatuionProbability;
         alist_reports.clear();
-        alist_graph = LogicShared.load_graph(s_graph_filepath);
+        alist_graph = LogicShared.load_graph(Consts.GRAPH_FILE_LOCATION);
+        time_start = System.currentTimeMillis();
         initialise(t_populationSize);
         evaluate(alist_population);
         geneticMagic(t_howManyTimes, i_elites);
-        printReportToConsole();
-        alist_population.get(0).print_entity();
+        time_end = System.currentTimeMillis();
+
+        if(Consts.PRINT_TO_CONSOLE)
+            printReportToConsole();
+
+        _execution_time = time_end - time_start;
+
+        if(Consts.PRINT_TO_CONSOLE)
+            alist_population.get(0).print_entity();
         if(printToFile)
         {
-            LogicShared.printReportToFile(alist_reports, s_reports_filepath, ++_i_report_counter);
+            LogicShared.printReportToFile(alist_reports, Consts.REPORT_PATH, ++_i_report_counter, _execution_time);
         }
+        if(Consts.PRINT_TO_CONSOLE)
+            System.out.println("Genetic done. Execution time: " + _execution_time + " milliseconds");
+
+        time_start = System.currentTimeMillis();
         for(int i = 0; i < t_howManyTimes; i++)
         {
             logicRandom.run(i_population_size);
         }
-        logicRandom.printToFile();
+        time_end = System.currentTimeMillis();
+        _execution_time = time_end - time_start;
+
+        if(Consts.PRINT_TO_CONSOLE)
+            System.out.println("Random done. Execution time: " + _execution_time + " milliseconds");
+
+        logicRandom.printToFile(_execution_time);
     } //public void run(int t_populationSize, double t_crossoverProbability, double t_mutatuionProbability, int t_howManyTimes, int i_elites, boolean printToFile)
 
     private void geneticMagic(int i_how_many_times, int i_elites)
@@ -117,7 +134,7 @@ public class LogicMain
         d_averageRoute = d_averageRoute / population.size();
 
         //zabezpieczenie
-        if(d_averageRoute >  population.get(population.size() - 1).getRouteLength())
+        if(d_averageRoute >  population.get(population.size() - 1).getRouteLength() && Consts.PRINT_TO_CONSOLE)
             System.out.println("=============Coś nie tak ze srednia...");
 
         String s_toreport = "b " + df.format(population.get(0).getRouteLength()) + " w " + df.format(population.get(population.size() - 1).getRouteLength()) + " avg " + df.format(d_averageRoute);
@@ -173,8 +190,8 @@ public class LogicMain
             ArrayList<Node> alist_child1 = new ArrayList<Node>();
             ArrayList<Node> alist_child2 = new ArrayList<Node>();
 
-            LogicAuxilliaryHolder lah_parent1 = parentsTournament(population);
-            LogicAuxilliaryHolder lah_parent2 = parentsTournament(population);
+            LogicAuxiliaryHolder lah_parent1 = parentsTournament(population);
+            LogicAuxiliaryHolder lah_parent2 = parentsTournament(population);
             SingleEntity sEntity_parent1 = lah_parent1.getEntity();
             int iParentKey1 = lah_parent1.getKey();
             SingleEntity sEntity_parent2 = lah_parent2.getEntity();
@@ -257,7 +274,7 @@ public class LogicMain
     } //public ArrayList<SingleEntity> mutation(ArrayList<SingleEntity> population)
 
     //TODO tak to zrobic?
-    private LogicAuxilliaryHolder parentsTournament(ArrayList<SingleEntity> population)
+    private LogicAuxiliaryHolder parentsTournament(ArrayList<SingleEntity> population)
     {
         ArrayList<SingleEntity> alist_candidates = new ArrayList<SingleEntity>();
         ArrayList<Integer> alist_indexes = new ArrayList<Integer>();
@@ -281,7 +298,7 @@ public class LogicMain
                 best_index = alist_indexes.get(i);
             }
         }
-        LogicAuxilliaryHolder l = new LogicAuxilliaryHolder(best_index, best);
+        LogicAuxiliaryHolder l = new LogicAuxiliaryHolder(best_index, best);
         return l;
     } //private SingleEntity parentsTournament(ArrayList<SingleEntity> population)
 

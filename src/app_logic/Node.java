@@ -1,8 +1,5 @@
 package app_logic;
 
-/**
- * Created by Piotr on 2015-03-15.
- */
 public class Node
 {
     private int i_coordinate_x;

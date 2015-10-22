@@ -1,12 +1,11 @@
 package app_logic;
 
+import utils.Consts;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-/**
- * Created by Piotr on 2015-03-17.
- */
 public class LogicShared
 {
     //wczytywanie grafu z pliku
@@ -23,6 +22,7 @@ public class LogicShared
             {
                 if (!s_read_line.equals("")) //umozliwia wstawianie pustych linii w pliku z grafem
                 {
+                    //TU W RAZIE POTRZEBY MOZNA DODAC KOLEJNE WARUNKI
                     if (s_read_line.charAt(0) == 'n')
                     {
                         //wczytywanie node'ow
@@ -40,12 +40,14 @@ public class LogicShared
         } //try
         catch (FileNotFoundException e)
         {
-            System.out.println("===ERROR: NIE ZNALEZIONO PLIKU W SCIEZCE: " + s_filepath);
+            if(Consts.PRINT_TO_CONSOLE)
+                System.out.println("===ERROR: NIE ZNALEZIONO PLIKU W SCIEZCE: " + s_filepath);
             e.printStackTrace();
         } //catch (FileNotFoundException e)
         catch (IOException e)
         {
-            System.out.println("===ERROR: NIE MOZNA WCZYTAC LINII");
+            if(Consts.PRINT_TO_CONSOLE)
+                System.out.println("===ERROR: NIE MOZNA WCZYTAC LINII");
             e.printStackTrace();
         } //catch (IOException e)
 
@@ -53,11 +55,11 @@ public class LogicShared
     } //public static ArrayList<Node> load_graph(String filepath)
 
     //drukowanie raportu do pliku
-    public static void printReportToFile(ArrayList<String> alist_reports, String s_report_file, int which)
+    public static void printReportToFile(ArrayList<String> alist_reports, String s_report_file, int which, long execution_time)
     {
         String s_filepath = s_report_file + which + ".csv";
 
-        String report = "";
+        String report = "execution time: " + execution_time + ";;\r\nbest;worst;average\r\n";
 
         for(int i = 0; i < alist_reports.size(); i++)
         {

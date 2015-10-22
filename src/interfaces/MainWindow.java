@@ -9,9 +9,6 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-/**
- * Created by Piotr on 2015-03-15.
- */
 public class MainWindow extends JFrame implements ActionListener
 {
     //text fields
@@ -161,7 +158,7 @@ public class MainWindow extends JFrame implements ActionListener
         label_prawdopodobienstwoKrzyzowania = new JLabel("Prawdopodobieństwo krzyżowania (%): ");
         label_prawdopodobienstwoMutacji = new JLabel("Prawdopodobieństwo mutacji (%): ");
         label_rozmiarPopulacji = new JLabel("Rozmiar populacji: ");
-        label_ileElity = new JLabel("Ilość 'elity': ");
+        label_ileElity = new JLabel("Liczba 'elity': ");
 
         //inicjalizacja textfieldow
         //formatowanie
